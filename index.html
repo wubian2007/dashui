@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>足球打水计算器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚽ 足球打水计算器</h1>
+            <p>专业足球投注计算工具</p>
+        </header>
+
+        <main>
+            <div class="calculator-section">
+                <h2>投注参数设置</h2>
+                
+                <div class="input-group">
+                    <div class="input-row">
+                        <div class="input-field">
+                            <label for="mainOdds">主盘赔率</label>
+                            <input type="number" id="mainOdds" step="0.01" min="1.01" placeholder="例如: 1.85">
+                        </div>
+                        <div class="input-field">
+                            <label for="mainAmount">主盘金额</label>
+                            <input type="number" id="mainAmount" step="0.01" min="0" placeholder="例如: 1000">
+                        </div>
+                        <div class="input-field">
+                            <label for="mainRebate">主盘反水 (%)</label>
+                            <input type="number" id="mainRebate" step="0.01" min="0" max="100" placeholder="例如: 0.5">
+                        </div>
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="input-field">
+                            <label for="subOdds">副盘赔率</label>
+                            <input type="number" id="subOdds" step="0.01" min="1.01" placeholder="例如: 2.10">
+                        </div>
+                        <div class="input-field">
+                            <label for="subRebate">副盘反水 (%)</label>
+                            <input type="number" id="subRebate" step="0.01" min="0" max="100" placeholder="例如: 0.3">
+                        </div>
+                    </div>
+                </div>
+
+                <button id="calculateBtn" class="calculate-btn">计算投注方案</button>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <h2>计算结果</h2>
+                
+                <div class="result-card">
+                    <h3>基础投注方案</h3>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <span class="label">副盘投注金额:</span>
+                            <span class="value" id="subAmount">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">总投入:</span>
+                            <span class="value" id="totalInvestment">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">主盘基本收益:</span>
+                            <span class="value" id="mainReturn">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">副盘基本收益:</span>
+                            <span class="value" id="subReturn">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">主盘反水金额:</span>
+                            <span class="value" id="mainRebateAmount">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">副盘反水金额:</span>
+                            <span class="value" id="subRebateAmount">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">总返回金额:</span>
+                            <span class="value" id="totalReturn">-</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">总收益:</span>
+                            <span class="value" id="totalProfit">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <h3>副盘赔率变化分析</h3>
+                    <div class="odds-variation">
+                        <div class="variation-section">
+                            <h4>赔率降低分析</h4>
+                            <div class="variation-table" id="decreaseTable"></div>
+                        </div>
+                        <div class="variation-section">
+                            <h4>赔率升高分析</h4>
+                            <div class="variation-table" id="increaseTable"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2024 足球打水计算器 - 专业投注分析工具</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
