@@ -189,7 +189,7 @@ header p {
 
 .variation-table table {
     width: 100%;
-    min-width: 600px;
+    min-width: 450px;
     border-collapse: collapse;
 }
 
@@ -272,7 +272,7 @@ footer {
     }
     
     .variation-table table {
-        min-width: 500px;
+        min-width: 400px;
     }
 }
 

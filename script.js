@@ -274,8 +274,6 @@ class FootballArbitrageCalculator {
                         <th>赔率变化</th>
                         <th>新赔率</th>
                         <th>投注金额</th>
-                        <th>总投入</th>
-                        <th>总返回</th>
                         <th>收益</th>
                         <th>收益率</th>
                     </tr>
@@ -292,8 +290,6 @@ class FootballArbitrageCalculator {
                     <td>${variation.oddsChange > 0 ? '+' : ''}${variation.oddsChange.toFixed(2)}</td>
                     <td>${variation.newOdds.toFixed(2)}</td>
                     <td>${this.formatCurrency(variation.newSubAmount)}</td>
-                    <td>${this.formatCurrency(variation.newTotalInvestment)}</td>
-                    <td>${this.formatCurrency(variation.newTotalReturn)}</td>
                     <td class="${profitClass}">${this.formatCurrency(variation.newTotalProfit)}</td>
                     <td class="${profitClass}">${this.formatPercentage(variation.newProfitPercentage)}</td>
                 </tr>
