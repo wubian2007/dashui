@@ -23,6 +23,7 @@ class FootballArbitrageCalculator {
         this.subRebateAmountElement = document.getElementById('subRebateAmount');
         this.totalReturnElement = document.getElementById('totalReturn');
         this.totalProfitElement = document.getElementById('totalProfit');
+        this.profitPercentageElement = document.getElementById('profitPercentage');
         this.decreaseTableElement = document.getElementById('decreaseTable');
         this.increaseTableElement = document.getElementById('increaseTable');
     }
@@ -136,11 +137,15 @@ class FootballArbitrageCalculator {
         const totalReturn = Math.max(mainTotalReturn, subTotalReturn);
         const totalProfit = totalReturn - totalInvestment;
         
+        // 计算收益百分比
+        const profitPercentage = totalInvestment > 0 ? (totalProfit / totalInvestment) * 100 : 0;
+        
         return {
             subAmount,
             totalInvestment,
             totalReturn,
             totalProfit,
+            profitPercentage,
             mainReturn,
             subReturn,
             mainRebateAmount,
@@ -174,6 +179,9 @@ class FootballArbitrageCalculator {
                 const newTotalReturn = Math.max(newMainTotalReturn, newSubTotalReturn);
                 const newTotalProfit = newTotalReturn - newTotalInvestment;
                 
+                // 计算收益百分比
+                const newProfitPercentage = newTotalInvestment > 0 ? (newTotalProfit / newTotalInvestment) * 100 : 0;
+                
                 variations.push({
                     type: 'decrease',
                     oddsChange: -i * 0.01,
@@ -181,7 +189,8 @@ class FootballArbitrageCalculator {
                     newSubAmount,
                     newTotalInvestment,
                     newTotalReturn,
-                    newTotalProfit
+                    newTotalProfit,
+                    newProfitPercentage
                 });
             }
         }
@@ -206,6 +215,9 @@ class FootballArbitrageCalculator {
             const newTotalReturn = Math.max(newMainTotalReturn, newSubTotalReturn);
             const newTotalProfit = newTotalReturn - newTotalInvestment;
             
+            // 计算收益百分比
+            const newProfitPercentage = newTotalInvestment > 0 ? (newTotalProfit / newTotalInvestment) * 100 : 0;
+            
             variations.push({
                 type: 'increase',
                 oddsChange: i * 0.01,
@@ -213,7 +225,8 @@ class FootballArbitrageCalculator {
                 newSubAmount,
                 newTotalInvestment,
                 newTotalReturn,
-                newTotalProfit
+                newTotalProfit,
+                newProfitPercentage
             });
         }
         
@@ -234,6 +247,10 @@ class FootballArbitrageCalculator {
                            baseResults.totalProfit < 0 ? 'profit-negative' : 'profit-neutral';
         this.totalProfitElement.textContent = this.formatCurrency(baseResults.totalProfit);
         this.totalProfitElement.className = `value ${profitClass}`;
+        
+        // 显示收益百分比
+        this.profitPercentageElement.textContent = this.formatPercentage(baseResults.profitPercentage);
+        this.profitPercentageElement.className = `value ${profitClass}`;
         
         // 显示赔率变化分析
         this.displayVariationTable(variationResults.filter(v => v.type === 'decrease'), this.decreaseTableElement);
@@ -260,6 +277,7 @@ class FootballArbitrageCalculator {
                         <th>总投入</th>
                         <th>总返回</th>
                         <th>收益</th>
+                        <th>收益率</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -277,6 +295,7 @@ class FootballArbitrageCalculator {
                     <td>${this.formatCurrency(variation.newTotalInvestment)}</td>
                     <td>${this.formatCurrency(variation.newTotalReturn)}</td>
                     <td class="${profitClass}">${this.formatCurrency(variation.newTotalProfit)}</td>
+                    <td class="${profitClass}">${this.formatPercentage(variation.newProfitPercentage)}</td>
                 </tr>
             `;
         });
@@ -294,6 +313,15 @@ class FootballArbitrageCalculator {
         }).format(Math.abs(amount));
         
         return amount >= 0 ? `+${formatted}` : `-${formatted}`;
+    }
+
+    formatPercentage(percentage) {
+        const formatted = new Intl.NumberFormat('zh-CN', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(Math.abs(percentage));
+        
+        return percentage >= 0 ? `+${formatted}%` : `-${formatted}%`;
     }
 
     showError(message) {
