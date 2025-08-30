@@ -183,20 +183,23 @@ header p {
 .variation-table {
     background: white;
     border-radius: 8px;
-    overflow: hidden;
+    overflow-x: auto;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .variation-table table {
     width: 100%;
+    min-width: 600px;
     border-collapse: collapse;
 }
 
 .variation-table th,
 .variation-table td {
-    padding: 12px;
+    padding: 8px 6px;
     text-align: center;
     border-bottom: 1px solid #e1e5e9;
+    font-size: 0.9rem;
+    white-space: nowrap;
 }
 
 .variation-table th {
@@ -260,6 +263,16 @@ footer {
     .calculator-section,
     .results-section {
         padding: 20px;
+    }
+    
+    .variation-table th,
+    .variation-table td {
+        padding: 6px 4px;
+        font-size: 0.8rem;
+    }
+    
+    .variation-table table {
+        min-width: 500px;
     }
 }
 

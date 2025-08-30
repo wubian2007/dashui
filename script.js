@@ -306,8 +306,6 @@ class FootballArbitrageCalculator {
 
     formatCurrency(amount) {
         const formatted = new Intl.NumberFormat('zh-CN', {
-            style: 'currency',
-            currency: 'CNY',
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         }).format(Math.abs(amount));
