@@ -11,19 +11,11 @@ class FootballArbitrageCalculator {
         this.mainRebateInput = document.getElementById('mainRebate');
         this.subOddsInput = document.getElementById('subOdds');
         this.subRebateInput = document.getElementById('subRebate');
+        this.subAmountInput = document.getElementById('subAmountInput');
         this.calculateBtn = document.getElementById('calculateBtn');
         this.resultsSection = document.getElementById('resultsSection');
         
         // 结果元素
-        this.subAmountElement = document.getElementById('subAmount');
-        this.totalInvestmentElement = document.getElementById('totalInvestment');
-        this.mainReturnElement = document.getElementById('mainReturn');
-        this.subReturnElement = document.getElementById('subReturn');
-        this.mainRebateAmountElement = document.getElementById('mainRebateAmount');
-        this.subRebateAmountElement = document.getElementById('subRebateAmount');
-        this.totalReturnElement = document.getElementById('totalReturn');
-        this.totalProfitElement = document.getElementById('totalProfit');
-        this.profitPercentageElement = document.getElementById('profitPercentage');
         this.decreaseTableElement = document.getElementById('decreaseTable');
         this.increaseTableElement = document.getElementById('increaseTable');
     }
@@ -100,6 +92,11 @@ class FootballArbitrageCalculator {
             // 计算赔率变化分析
             const variationResults = this.calculateOddsVariation(mainOdds, mainAmount, mainRebate, subOdds, subAmount, subRebate);
             
+            // 填充副盘金额输入框（只读显示）
+            if (this.subAmountInput) {
+                this.subAmountInput.value = baseResults.subAmount.toFixed(2);
+            }
+
             // 显示结果
             this.displayResults(baseResults, variationResults);
             
@@ -157,6 +154,27 @@ class FootballArbitrageCalculator {
 
     calculateOddsVariation(mainOdds, mainAmount, mainRebate, subOdds, subAmount, subRebate) {
         const variations = [];
+        
+        // 添加变化为0的默认行（当前赔率）
+        const baseVariation = {
+            type: 'base',
+            oddsChange: 0,
+            newOdds: subOdds,
+            newSubAmount: subAmount,
+            newTotalInvestment: mainAmount + subAmount,
+            newTotalReturn: Math.max(
+                mainAmount * mainOdds + mainAmount * mainRebate,
+                subAmount * subOdds + subAmount * subRebate
+            ),
+            newTotalProfit: Math.max(
+                mainAmount * mainOdds + mainAmount * mainRebate,
+                subAmount * subOdds + subAmount * subRebate
+            ) - (mainAmount + subAmount),
+            newProfitPercentage: 0
+        };
+        baseVariation.newProfitPercentage = baseVariation.newTotalInvestment > 0 ? 
+            (baseVariation.newTotalProfit / baseVariation.newTotalInvestment) * 100 : 0;
+        variations.push(baseVariation);
         
         // 计算赔率降低0.01到0.05的情况
         for (let i = 1; i <= 5; i++) {
@@ -234,27 +252,13 @@ class FootballArbitrageCalculator {
     }
 
     displayResults(baseResults, variationResults) {
-        // 显示基础结果
-        this.subAmountElement.textContent = this.formatCurrency(baseResults.subAmount);
-        this.totalInvestmentElement.textContent = this.formatCurrency(baseResults.totalInvestment);
-        this.mainReturnElement.textContent = this.formatCurrency(baseResults.mainReturn);
-        this.subReturnElement.textContent = this.formatCurrency(baseResults.subReturn);
-        this.mainRebateAmountElement.textContent = this.formatCurrency(baseResults.mainRebateAmount);
-        this.subRebateAmountElement.textContent = this.formatCurrency(baseResults.subRebateAmount);
-        this.totalReturnElement.textContent = this.formatCurrency(baseResults.totalReturn);
-        
-        const profitClass = baseResults.totalProfit > 0 ? 'profit-positive' : 
-                           baseResults.totalProfit < 0 ? 'profit-negative' : 'profit-neutral';
-        this.totalProfitElement.textContent = this.formatCurrency(baseResults.totalProfit);
-        this.totalProfitElement.className = `value ${profitClass}`;
-        
-        // 显示收益百分比
-        this.profitPercentageElement.textContent = this.formatPercentage(baseResults.profitPercentage);
-        this.profitPercentageElement.className = `value ${profitClass}`;
-        
         // 显示赔率变化分析
-        this.displayVariationTable(variationResults.filter(v => v.type === 'decrease'), this.decreaseTableElement);
-        this.displayVariationTable(variationResults.filter(v => v.type === 'increase'), this.increaseTableElement);
+        const baseVariation = variationResults.filter(v => v.type === 'base');
+        const decreaseVariations = variationResults.filter(v => v.type === 'decrease');
+        const increaseVariations = variationResults.filter(v => v.type === 'increase');
+        
+        this.displayVariationTable([...baseVariation, ...decreaseVariations], this.decreaseTableElement);
+        this.displayVariationTable([...baseVariation, ...increaseVariations], this.increaseTableElement);
         
         // 显示结果区域
         this.resultsSection.style.display = 'block';
@@ -285,8 +289,11 @@ class FootballArbitrageCalculator {
             const profitClass = variation.newTotalProfit > 0 ? 'profit-positive' : 
                                variation.newTotalProfit < 0 ? 'profit-negative' : 'profit-neutral';
             
+            // 为变化为0的行添加特殊样式
+            const rowClass = variation.oddsChange === 0 ? 'base-variation' : '';
+            
             tableHTML += `
-                <tr>
+                <tr class="${rowClass}">
                     <td>${variation.oddsChange > 0 ? '+' : ''}${variation.oddsChange.toFixed(2)}</td>
                     <td>${variation.newOdds.toFixed(2)}</td>
                     <td>${this.formatCurrency(variation.newSubAmount)}</td>

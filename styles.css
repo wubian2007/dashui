@@ -61,6 +61,15 @@ header p {
     margin-bottom: 20px;
 }
 
+.input-row.inline {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    align-items: end;
+    gap: 12px;
+    justify-content: flex-start;
+}
+
 .input-field {
     display: flex;
     flex-direction: column;
@@ -73,11 +82,36 @@ header p {
 }
 
 .input-field input {
-    padding: 12px 15px;
+    padding: 8px 10px;
     border: 2px solid #e1e5e9;
     border-radius: 8px;
-    font-size: 1rem;
+    font-size: 0.95rem;
     transition: all 0.3s ease;
+    max-width: 180px;
+}
+
+.input-field input#mainOdds {
+    max-width: 100px;
+}
+
+.input-field input#mainAmount {
+    max-width: 140px;
+}
+
+.input-field input#mainRebate {
+    max-width: 100px;
+}
+
+.input-field input#subOdds {
+    max-width: 100px;
+}
+
+.input-field input#subAmountInput {
+    max-width: 140px;
+}
+
+.input-field input#subRebate {
+    max-width: 100px;
 }
 
 .input-field input:focus {
@@ -132,6 +166,7 @@ header p {
     padding: 25px;
     margin-bottom: 25px;
     border-left: 4px solid #667eea;
+    min-height: 400px;
 }
 
 .result-card h3 {
@@ -170,7 +205,8 @@ header p {
 .odds-variation {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 30px;
+    gap: 20px;
+    align-items: start;
 }
 
 .variation-section h4 {
@@ -214,6 +250,15 @@ header p {
 
 .variation-table tr:hover {
     background: #e3f2fd;
+}
+
+.variation-table tr.base-variation {
+    background: #fff3e0;
+    font-weight: 600;
+}
+
+.variation-table tr.base-variation:hover {
+    background: #ffe0b2;
 }
 
 .profit-positive {
@@ -274,6 +319,36 @@ footer {
     .variation-table table {
         min-width: 400px;
     }
+}
+
+/* 移动端强制样式（当 body.mobile 存在时始终按手机布局显示） */
+/* 强制所有设备都使用移动端布局 */
+.input-row {
+    grid-template-columns: 1fr;
+}
+
+.input-row.inline {
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.result-grid {
+    grid-template-columns: 1fr;
+}
+
+.odds-variation {
+    grid-template-columns: 1fr;
+}
+
+.calculator-section,
+.results-section {
+    padding: 20px;
+}
+
+.input-field input {
+    max-width: 180px;
 }
 
 /* 加载动画 */
